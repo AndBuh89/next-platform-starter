@@ -1,63 +1,39 @@
-import Link from 'next/link';
-import { Card } from 'components/card';
-import { ContextAlert } from 'components/context-alert';
-import { Markdown } from 'components/markdown';
-import { RandomQuote } from 'components/random-quote';
-import { getNetlifyContext } from 'utils';
+"use client";
 
-const contextExplainer = `
-The card below is rendered on the server based on the value of \`process.env.CONTEXT\` 
-([docs](https://docs.netlify.com/configure-builds/environment-variables/#build-metadata)):
-`;
+import { useState } from "react";
 
-const preDynamicContentExplainer = `
-The card content below is fetched by the client-side from \`/quotes/random\` (see file \`app/quotes/random/route.js\`) with a different quote shown on each page load:
-`;
+const DIGISTORE_AFFILIATE_LINK =
+  "https://www.digistore24.com/redir/PRODUCT_ID/YOUR_AFFILIATE_ID";
 
-const ctx = getNetlifyContext();
+const questions = [
+  { q: "How would you rate your daily energy?", a: ["Low", "Medium", "High"] },
+  { q: "How is your sleep quality?", a: ["Poor", "Average", "Great"] },
+  { q: "How often do you exercise?", a: ["Rarely", "Sometimes", "Often"] },
+  { q: "How is your daily focus?", a: ["Low", "Medium", "Sharp"] },
+  { q: "How would you rate your confidence?", a: ["Low", "Medium", "High"] },
+];
 
 export default function Page() {
-    return (
-        <div className="flex flex-col gap-12 sm:gap-16">
-            <section>
-                <ContextAlert className="mb-6" />
-                <h1 className="mb-4">Netlify Platform Starter – Next.js</h1>
-                <p className="mb-6 text-lg">
-                    Deploy the latest version of Next.js — including Turbopack, React Compiler, and the new caching APIs
-                    — on Netlify in seconds. No configuration or custom adapter required.
-                </p>
-                <Link href="https://docs.netlify.com/frameworks/next-js/overview/" className="btn btn-lg sm:min-w-64">
-                    Read the Docs
-                </Link>
-            </section>
-            {!!ctx && (
-                <section className="flex flex-col gap-4">
-                    <Markdown content={contextExplainer} />
-                    <RuntimeContextCard />
-                </section>
-            )}
-            <section className="flex flex-col gap-4">
-                <Markdown content={preDynamicContentExplainer} />
-                <RandomQuote />
-            </section>
-        </div>
-    );
-}
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
 
-function RuntimeContextCard() {
-    const title = `Netlify Context: running in ${ctx} mode.`;
-    if (ctx === 'dev') {
-        return (
-            <Card title={title}>
-                <p>Next.js will rebuild any page you navigate to, including static pages.</p>
-            </Card>
-        );
-    } else {
-        const now = new Date().toISOString();
-        return (
-            <Card title={title}>
-                <p>This page was statically-generated at build time ({now}).</p>
-            </Card>
-        );
-    }
+  const next = () => {
+    if (step < questions.length - 1) setStep(step + 1);
+    else window.location.href = DIGISTORE_AFFILIATE_LINK;
+  };
+
+  return (
+    <div style={{minHeight:"100vh",background:"#050c1a",color:"white",display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
+      <div style={{maxWidth:480,width:"100%",background:"#0d1b3d",borderRadius:16,padding:24,boxShadow:"0 0 40px rgba(0,0,0,.6)"}}>
+        <h1 style={{fontSize:28,fontWeight:700,marginBottom:16}}>Men’s Vitality Check</h1>
+        <p style={{opacity:.7,marginBottom:20}}>Answer 5 quick questions to see your result</p>
+        <div>
+          <p style={{marginBottom:12,fontWeight:600}}>{questions[step].q}</p>
+          {questions[step].a.map(a => (
+            <button key={a} onClick={next} style={{display:"block",width:"100%",padding:12,borderRadius:10,border:"none",marginBottom:10,fontWeight:600,background:"#2563eb",color:"white",cursor:"pointer"}}>{a}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
