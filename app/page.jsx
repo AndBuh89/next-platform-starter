@@ -59,10 +59,20 @@ export default function Page() {
 }, []);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
-    useEffect(() => {
-    if (window.ttq) {
-      window.ttq.track("ViewContent");
-    }
+   export default function Page() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (window.ttq && window.ttq.page) {
+        window.ttq.track("ViewContent", {
+          content_id: "mensflowcheck-quiz",
+          content_type: "product",
+        });
+        clearInterval(interval);
+      }
+    }, 300);
   }, []);
 
   const done = step >= QUESTIONS.length;
