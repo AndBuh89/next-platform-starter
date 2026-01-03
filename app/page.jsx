@@ -1,64 +1,57 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-const DIGISTORE_AFFILIATE_LINK =
-  "https://getgoliathxl10.com/read#aff=AndyBuh"; // TODO: pune linkul tău real
+const CTA_LINK = "https://mensflowcheck.com"; // poți lăsa site-ul tău aici (sau link Digistore)
 
 const QUESTIONS = [
   {
     id: "age",
     q: "1) What’s your age range?",
-    a: ["35–44", "45–54", "55–65", "65+"],
+    a: ["35–44", "45–54", "55–64", "65+"],
     score: [2, 1, 0, 0],
   },
   {
     id: "energy",
-    q: "2) How would you rate your daily energy?",
+    q: "2) How would you rate your daily energy lately?",
     a: ["Low", "Medium", "High"],
-    score: [0, 1, 2],
-  },
-  {
-    id: "sleep",
-    q: "3) How is your sleep quality lately?",
-    a: ["Poor", "Okay", "Good"],
-    score: [0, 1, 2],
-  },
-  {
-    id: "activity",
-    q: "4) How often do you exercise per week?",
-    a: ["Rarely", "1–2 times", "3+ times"],
-    score: [0, 1, 2],
-  },
-  {
-    id: "stress",
-    q: "5) What’s your typical stress level?",
-    a: ["High", "Medium", "Low"],
     score: [0, 1, 2],
   },
   {
     id: "focus",
-    q: "6) How is your focus during the day?",
-    a: ["Low", "Medium", "Strong"],
+    q: "3) How would you describe your focus & mental clarity?",
+    a: ["Often distracted", "Mostly focused", "Very sharp"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "habits",
+    q: "4) How consistent are your daily habits (sleep, meals, routine)?",
+    a: ["Very inconsistent", "Somewhat consistent", "Very consistent"],
     score: [0, 1, 2],
   },
   {
     id: "confidence",
-    q: "7) How would you rate your day-to-day confidence & drive?",
+    q: "5) How motivated and confident do you feel day-to-day?",
     a: ["Low", "Medium", "High"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "satisfaction",
+    q: "6) How satisfied are you with your current lifestyle performance?",
+    a: ["Not satisfied", "Somewhat satisfied", "Very satisfied"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "openness",
+    q: "7) How open are you to improving your daily routine for better vitality?",
+    a: ["Not interested", "Somewhat open", "Very open"],
     score: [0, 1, 2],
   },
 ];
 
 export default function Page() {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState({}); // { [id]: idx }
-  const [toast, setToast] = useState(null);
-  useEffect(() => {
-  if (typeof window !== "undefined" && window.ttq) {
-    window.ttq.track("ViewContent");
-  }
-}, []);
+  const [answers, setAnswers] = useState({});
 
   const done = step >= QUESTIONS.length;
 
@@ -71,32 +64,27 @@ export default function Page() {
   }, [answers]);
 
   const band = useMemo(() => {
-    // max: 14
-    if (total <= 5) return "Low";
-    if (total <= 10) return "Medium";
-    return "Strong";
+    // max score = 14
+    if (total <= 5) return "Low Vitality";
+    if (total <= 10) return "Moderate Vitality";
+    return "Strong Vitality";
   }, [total]);
 
   const headline = useMemo(() => {
-    if (band === "Low") return "Your circulation-support signals look underpowered";
-    if (band === "Medium") return "Your circulation-support signals look average";
-    return "Your circulation-support signals look strong";
+    if (band === "Low Vitality") return "Your daily vitality habits look underpowered";
+    if (band === "Moderate Vitality") return "Your daily vitality habits look average";
+    return "Your daily vitality habits look strong";
   }, [band]);
 
   const summary = useMemo(() => {
-    if (band === "Low")
-      return "Your inputs suggest energy, recovery and lifestyle signals may be holding you back. Next: a simple, non-medical daily protocol designed to support blood flow, performance and confidence.";
-    if (band === "Medium")
-      return "You have a solid baseline, but there’s room to optimize daily circulation support for stronger energy, focus and drive. Next: a simple daily protocol.";
-    return "You’re in a strong zone. If you want consistency over time, a daily protocol can help you maintain momentum.";
+    if (band === "Low Vitality")
+      return "Your inputs suggest daily energy, focus and routine habits may be holding you back. Next: a simple lifestyle-based daily routine designed to support energy, confidence and consistency.";
+    if (band === "Moderate Vitality")
+      return "You have a solid baseline, but there’s room to optimize your daily routine for stronger energy, focus and drive. Next: a simple daily routine you can follow.";
+    return "You’re in a strong zone. If you want consistent performance over time, a simple routine can help you maintain momentum.";
   }, [band]);
 
   const progress = Math.round((Math.min(step, QUESTIONS.length) / QUESTIONS.length) * 100);
-
-  const showToast = (msg) => {
-    setToast(msg);
-    window.setTimeout(() => setToast(null), 2200);
-  };
 
   const pick = (idx) => {
     const q = QUESTIONS[step];
@@ -124,17 +112,17 @@ export default function Page() {
           <div style={styles.card}>
             <div style={{ ...styles.pill, display: "inline-flex", gap: 8, alignItems: "center" }}>
               <span style={{ ...styles.dot, width: 8, height: 8 }} />
-              Evidence-informed • Non-medical
+              Informational • Lifestyle-based • Non-medical
             </div>
 
             <h1 style={styles.h1}>
-              Men’s Circulation Check
+              Men’s Daily Vitality Check
               <br />
               in 60 seconds
             </h1>
 
             <p style={styles.sub}>
-              Quick self-check based on daily energy, focus, lifestyle and recovery signals. This is <b>not</b> medical
+              A short lifestyle self-check focused on daily energy, focus and confidence habits. This is <b>not</b> medical
               advice.
             </p>
 
@@ -149,7 +137,7 @@ export default function Page() {
               </div>
               <div style={styles.kpi}>
                 <b>Practical</b>
-                <span style={styles.kpiSpan}>actionable protocol</span>
+                <span style={styles.kpiSpan}>simple daily routine</span>
               </div>
             </div>
 
@@ -161,7 +149,7 @@ export default function Page() {
 
           <div style={styles.card} id="quizCard">
             <div style={styles.quizTop}>
-              <div style={{ fontWeight: 800 }}>Circulation Check</div>
+              <div style={{ fontWeight: 800 }}>Vitality Check</div>
               <div style={styles.pill}>{done ? "Completed" : `Step ${step + 1} of ${QUESTIONS.length}`}</div>
             </div>
 
@@ -193,28 +181,25 @@ export default function Page() {
                   <span
                     style={{
                       ...styles.badge,
-                      background: band === "Low" ? "#fb7185" : band === "Strong" ? "#34d399" : "#fbbf24",
+                      background:
+                        band === "Low Vitality" ? "#fb7185" : band === "Strong Vitality" ? "#34d399" : "#fbbf24",
                     }}
                   />
-                  Circulation Support Score: {band}
+                  Vitality Score: {band}
                 </div>
 
                 <h2 style={styles.h2}>{headline}</h2>
                 <p style={styles.resultP}>{summary}</p>
 
-                <a href={DIGISTORE_AFFILIATE_LINK} target="_blank" rel="nofollow noopener" style={styles.cta}>
-                  View the daily support protocol
+                <a href={CTA_LINK} target="_blank" rel="nofollow noopener" style={styles.cta}>
+                  View the daily vitality routine
                 </a>
 
-                <div style={styles.small2}>
-                  Tip: open the protocol in a new tab so you can come back and compare notes.
-                </div>
+                <div style={styles.small2}>Tip: open it in a new tab so you can come back to your score.</div>
               </div>
             )}
           </div>
         </div>
-
-        {toast && <div style={styles.toast}>{toast}</div>}
       </div>
     </div>
   );
@@ -232,7 +217,13 @@ const styles = {
   top: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, marginBottom: 18 },
   brand: { display: "flex", alignItems: "center", gap: 10, fontWeight: 800, letterSpacing: ".3px" },
   dot: { width: 10, height: 10, borderRadius: 999, background: "linear-gradient(135deg,#5eead4,#60a5fa)" },
-  pill: { fontSize: 12, color: "#9fb0d0", border: "1px solid rgba(159,176,208,.25)", padding: "8px 10px", borderRadius: 999 },
+  pill: {
+    fontSize: 12,
+    color: "#9fb0d0",
+    border: "1px solid rgba(159,176,208,.25)",
+    padding: "8px 10px",
+    borderRadius: 999,
+  },
   grid: { display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 18, alignItems: "stretch" },
   card: {
     background: "linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))",
@@ -299,16 +290,4 @@ const styles = {
     textDecoration: "none",
   },
   small2: { marginTop: 10, fontSize: 11, color: "rgba(234,240,255,.55)" },
-  toast: {
-    position: "fixed",
-    left: 18,
-    right: 18,
-    bottom: 18,
-    maxWidth: 980,
-    margin: "0 auto",
-    background: "rgba(15,26,51,.9)",
-    border: "1px solid rgba(159,176,208,.25)",
-    padding: "12px 14px",
-    borderRadius: 14,
-  },
 };
