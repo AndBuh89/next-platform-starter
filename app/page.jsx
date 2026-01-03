@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const DIGISTORE_AFFILIATE_LINK =
-  "https://www.digistore24.com/redir/PRODUCT_ID/YOUR_AFFILIATE_ID";
+  "https://getgoliathxl10.com/read#aff=AndyBuh";
 
 const questions = [
   { q: "How would you rate your daily energy?", a: ["Low", "Medium", "High"] },
