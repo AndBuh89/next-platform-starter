@@ -69,8 +69,6 @@ export default function Page() {
 
   const done = step >= QUESTIONS.length;
 
-  const done = step >= QUESTIONS.length;
-
   const total = useMemo(() => {
     return QUESTIONS.reduce((sum, q) => {
       const idx = answers[q.id];
@@ -213,12 +211,12 @@ export default function Page() {
   rel="nofollow noopener"
   style={styles.cta}
   onClick={() => {
-    if (window.ttq) {
-      window.ttq.track("CompleteRegistration", {
-        content_id: "mensflowcheck-offer",
-        content_type: "product",
-      });
-    }
+    if (window.ttq?.track) {
+  window.ttq.track("CompleteRegistration", {
+    content_id: "mensflowcheck-offer",
+    content_type: "product",
+  });
+}
   }}
 >
   View the daily vitality routine
