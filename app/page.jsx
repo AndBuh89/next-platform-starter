@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-const CTA_LINK = "https://mensflowcheck.com"; // poți lăsa site-ul tău aici (sau link Digistore)
-
+const CTA_LINK = "https://www.checkout-ds24.com/product/592276?ds24tr=6DVJVMuVd2cVuQVEw5rPFd&pfnid=1&aff=AndyBuh";
 const QUESTIONS = [
   {
     id: "age",
@@ -191,8 +190,16 @@ export default function Page() {
                 <h2 style={styles.h2}>{headline}</h2>
                 <p style={styles.resultP}>{summary}</p>
 
-                <a href={CTA_LINK} target="_blank" rel="nofollow noopener" style={styles.cta}>
-                  View the daily vitality routine
+                <a
+  href={CTA_LINK}
+  target="_blank"
+  rel="nofollow noopener"
+  style={styles.cta}
+  onClick={() => {
+    if (window.ttq) window.ttq.track("CompleteRegistration");
+  }}
+>
+  View the daily vitality routine
                 </a>
 
                 <div style={styles.small2}>Tip: open it in a new tab so you can come back to your score.</div>
