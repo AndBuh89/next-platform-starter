@@ -195,7 +195,7 @@ export default function Page() {
                 <h2 style={styles.h2}>{headline}</h2>
                 <p style={styles.resultP}>{summary}</p>
 
-                <a
+         <a
   href={CTA_LINK}
   target="_blank"
   rel="nofollow noopener"
