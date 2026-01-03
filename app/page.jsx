@@ -1,39 +1,309 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const DIGISTORE_AFFILIATE_LINK =
-  "https://getgoliathxl10.com/read#aff=AndyBuh";
+  "https://getgoliathxl10.com/read#aff=AndyBuh"; // TODO: pune linkul tău real
 
-const questions = [
-  { q: "How would you rate your daily energy?", a: ["Low", "Medium", "High"] },
-  { q: "How is your sleep quality?", a: ["Poor", "Average", "Great"] },
-  { q: "How often do you exercise?", a: ["Rarely", "Sometimes", "Often"] },
-  { q: "How is your daily focus?", a: ["Low", "Medium", "Sharp"] },
-  { q: "How would you rate your confidence?", a: ["Low", "Medium", "High"] },
+const QUESTIONS = [
+  {
+    id: "age",
+    q: "1) What’s your age range?",
+    a: ["35–44", "45–54", "55–65", "65+"],
+    score: [2, 1, 0, 0],
+  },
+  {
+    id: "energy",
+    q: "2) How would you rate your daily energy?",
+    a: ["Low", "Medium", "High"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "sleep",
+    q: "3) How is your sleep quality lately?",
+    a: ["Poor", "Okay", "Good"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "activity",
+    q: "4) How often do you exercise per week?",
+    a: ["Rarely", "1–2 times", "3+ times"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "stress",
+    q: "5) What’s your typical stress level?",
+    a: ["High", "Medium", "Low"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "focus",
+    q: "6) How is your focus during the day?",
+    a: ["Low", "Medium", "Strong"],
+    score: [0, 1, 2],
+  },
+  {
+    id: "confidence",
+    q: "7) How would you rate your day-to-day confidence & drive?",
+    a: ["Low", "Medium", "High"],
+    score: [0, 1, 2],
+  },
 ];
 
 export default function Page() {
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState({}); // { [id]: idx }
+  const [toast, setToast] = useState(null);
 
-  const next = () => {
-    if (step < questions.length - 1) setStep(step + 1);
-    else window.location.href = DIGISTORE_AFFILIATE_LINK;
+  const done = step >= QUESTIONS.length;
+
+  const total = useMemo(() => {
+    return QUESTIONS.reduce((sum, q) => {
+      const idx = answers[q.id];
+      if (idx === undefined) return sum;
+      return sum + q.score[idx];
+    }, 0);
+  }, [answers]);
+
+  const band = useMemo(() => {
+    // max: 14
+    if (total <= 5) return "Low";
+    if (total <= 10) return "Medium";
+    return "Strong";
+  }, [total]);
+
+  const headline = useMemo(() => {
+    if (band === "Low") return "Your circulation-support signals look underpowered";
+    if (band === "Medium") return "Your circulation-support signals look average";
+    return "Your circulation-support signals look strong";
+  }, [band]);
+
+  const summary = useMemo(() => {
+    if (band === "Low")
+      return "Your inputs suggest energy, recovery and lifestyle signals may be holding you back. Next: a simple, non-medical daily protocol designed to support blood flow, performance and confidence.";
+    if (band === "Medium")
+      return "You have a solid baseline, but there’s room to optimize daily circulation support for stronger energy, focus and drive. Next: a simple daily protocol.";
+    return "You’re in a strong zone. If you want consistency over time, a daily protocol can help you maintain momentum.";
+  }, [band]);
+
+  const progress = Math.round((Math.min(step, QUESTIONS.length) / QUESTIONS.length) * 100);
+
+  const showToast = (msg) => {
+    setToast(msg);
+    window.setTimeout(() => setToast(null), 2200);
+  };
+
+  const pick = (idx) => {
+    const q = QUESTIONS[step];
+    setAnswers((p) => ({ ...p, [q.id]: idx }));
+    if (step < QUESTIONS.length - 1) setStep(step + 1);
+    else setStep(QUESTIONS.length);
+  };
+
+  const back = () => {
+    if (step > 0) setStep(step - 1);
   };
 
   return (
-    <div style={{minHeight:"100vh",background:"#050c1a",color:"white",display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
-      <div style={{maxWidth:480,width:"100%",background:"#0d1b3d",borderRadius:16,padding:24,boxShadow:"0 0 40px rgba(0,0,0,.6)"}}>
-        <h1 style={{fontSize:28,fontWeight:700,marginBottom:16}}>Men’s Vitality Check</h1>
-        <p style={{opacity:.7,marginBottom:20}}>Answer 5 quick questions to see your result</p>
-        <div>
-          <p style={{marginBottom:12,fontWeight:600}}>{questions[step].q}</p>
-          {questions[step].a.map(a => (
-            <button key={a} onClick={next} style={{display:"block",width:"100%",padding:12,borderRadius:10,border:"none",marginBottom:10,fontWeight:600,background:"#2563eb",color:"white",cursor:"pointer"}}>{a}</button>
-          ))}
+    <div style={styles.bg}>
+      <div style={styles.wrap}>
+        <div style={styles.top}>
+          <div style={styles.brand}>
+            <span style={styles.dot} />
+            VitalFlow Check
+          </div>
+          <div style={styles.pill}>USA • Men 35+ • 60-second check</div>
         </div>
+
+        <div style={styles.grid}>
+          <div style={styles.card}>
+            <div style={{ ...styles.pill, display: "inline-flex", gap: 8, alignItems: "center" }}>
+              <span style={{ ...styles.dot, width: 8, height: 8 }} />
+              Evidence-informed • Non-medical
+            </div>
+
+            <h1 style={styles.h1}>
+              Men’s Circulation Check
+              <br />
+              in 60 seconds
+            </h1>
+
+            <p style={styles.sub}>
+              Quick self-check based on daily energy, focus, lifestyle and recovery signals. This is <b>not</b> medical
+              advice.
+            </p>
+
+            <div style={styles.kpis}>
+              <div style={styles.kpi}>
+                <b>Fast</b>
+                <span style={styles.kpiSpan}>~7 questions</span>
+              </div>
+              <div style={styles.kpi}>
+                <b>Personalized</b>
+                <span style={styles.kpiSpan}>score + next step</span>
+              </div>
+              <div style={styles.kpi}>
+                <b>Practical</b>
+                <span style={styles.kpiSpan}>actionable protocol</span>
+              </div>
+            </div>
+
+            <div style={styles.divider} />
+            <div style={styles.small}>
+              <b>Disclaimer:</b> informational only. No diagnosis, treatment, cure, or prevention claims.
+            </div>
+          </div>
+
+          <div style={styles.card} id="quizCard">
+            <div style={styles.quizTop}>
+              <div style={{ fontWeight: 800 }}>Circulation Check</div>
+              <div style={styles.pill}>{done ? "Completed" : `Step ${step + 1} of ${QUESTIONS.length}`}</div>
+            </div>
+
+            <div style={styles.progress}>
+              <div style={{ ...styles.bar, width: `${progress}%` }} />
+            </div>
+
+            {!done ? (
+              <div style={{ marginTop: 14 }}>
+                <div style={styles.q}>{QUESTIONS[step].q}</div>
+                <div style={styles.opts}>
+                  {QUESTIONS[step].a.map((label, idx) => (
+                    <button key={label} onClick={() => pick(idx)} style={styles.optBtn}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
+                  <button onClick={back} style={styles.backBtn} disabled={step === 0}>
+                    Back
+                  </button>
+                  <div style={{ flex: 1 }} />
+                </div>
+              </div>
+            ) : (
+              <div style={{ marginTop: 14 }}>
+                <div style={styles.scorePill}>
+                  <span
+                    style={{
+                      ...styles.badge,
+                      background: band === "Low" ? "#fb7185" : band === "Strong" ? "#34d399" : "#fbbf24",
+                    }}
+                  />
+                  Circulation Support Score: {band}
+                </div>
+
+                <h2 style={styles.h2}>{headline}</h2>
+                <p style={styles.resultP}>{summary}</p>
+
+                <a href={DIGISTORE_AFFILIATE_LINK} target="_blank" rel="nofollow noopener" style={styles.cta}>
+                  View the daily support protocol
+                </a>
+
+                <div style={styles.small2}>
+                  Tip: open the protocol in a new tab so you can come back and compare notes.
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {toast && <div style={styles.toast}>{toast}</div>}
       </div>
     </div>
   );
 }
+
+const styles = {
+  bg: {
+    minHeight: "100vh",
+    background:
+      "radial-gradient(1200px 600px at 20% 10%, rgba(96,165,250,.18), transparent), radial-gradient(900px 500px at 80% 30%, rgba(94,234,212,.14), transparent), #0b1220",
+    color: "#eaf0ff",
+    padding: 24,
+  },
+  wrap: { maxWidth: 980, margin: "0 auto" },
+  top: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 14, marginBottom: 18 },
+  brand: { display: "flex", alignItems: "center", gap: 10, fontWeight: 800, letterSpacing: ".3px" },
+  dot: { width: 10, height: 10, borderRadius: 999, background: "linear-gradient(135deg,#5eead4,#60a5fa)" },
+  pill: { fontSize: 12, color: "#9fb0d0", border: "1px solid rgba(159,176,208,.25)", padding: "8px 10px", borderRadius: 999 },
+  grid: { display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 18, alignItems: "stretch" },
+  card: {
+    background: "linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))",
+    border: "1px solid rgba(159,176,208,.18)",
+    borderRadius: 22,
+    padding: 22,
+    boxShadow: "0 20px 60px rgba(0,0,0,.35)",
+  },
+  h1: { fontSize: 40, lineHeight: 1.05, margin: "10px 0 10px" },
+  sub: { color: "#9fb0d0", fontSize: 16, lineHeight: 1.55, margin: "0 0 16px" },
+  kpis: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 16 },
+  kpi: { border: "1px solid rgba(159,176,208,.18)", borderRadius: 16, padding: 12, background: "rgba(15,26,51,.35)" },
+  kpiSpan: { color: "#9fb0d0", fontSize: 12 },
+  divider: { height: 1, background: "rgba(159,176,208,.18)", margin: "14px 0" },
+  small: { fontSize: 11, color: "rgba(234,240,255,.55)" },
+  quizTop: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10 },
+  progress: { height: 10, background: "rgba(159,176,208,.16)", borderRadius: 999, overflow: "hidden" },
+  bar: { height: "100%", background: "linear-gradient(90deg,#5eead4,#60a5fa)" },
+  q: { marginTop: 10, fontWeight: 800, fontSize: 16 },
+  opts: { display: "grid", gap: 10, marginTop: 12 },
+  optBtn: {
+    textAlign: "left",
+    padding: 12,
+    borderRadius: 16,
+    border: "1px solid rgba(159,176,208,.18)",
+    background: "rgba(15,26,51,.35)",
+    color: "#eaf0ff",
+    cursor: "pointer",
+    fontWeight: 700,
+  },
+  backBtn: {
+    padding: "10px 14px",
+    borderRadius: 14,
+    border: "1px solid rgba(159,176,208,.25)",
+    background: "transparent",
+    color: "#eaf0ff",
+    cursor: "pointer",
+    fontWeight: 700,
+    opacity: 0.9,
+  },
+  scorePill: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "8px 10px",
+    borderRadius: 999,
+    border: "1px solid rgba(159,176,208,.25)",
+    background: "rgba(15,26,51,.35)",
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  badge: { width: 10, height: 10, borderRadius: 999, background: "#fbbf24" },
+  h2: { margin: "10px 0 8px", fontSize: 22 },
+  resultP: { margin: "0 0 14px", color: "#9fb0d0", lineHeight: 1.55 },
+  cta: {
+    display: "inline-block",
+    width: "100%",
+    textAlign: "center",
+    padding: "12px 16px",
+    borderRadius: 14,
+    background: "linear-gradient(135deg,#5eead4,#60a5fa)",
+    color: "#061224",
+    fontWeight: 900,
+    textDecoration: "none",
+  },
+  small2: { marginTop: 10, fontSize: 11, color: "rgba(234,240,255,.55)" },
+  toast: {
+    position: "fixed",
+    left: 18,
+    right: 18,
+    bottom: 18,
+    maxWidth: 980,
+    margin: "0 auto",
+    background: "rgba(15,26,51,.9)",
+    border: "1px solid rgba(159,176,208,.25)",
+    padding: "12px 14px",
+    borderRadius: 14,
+  },
+};
