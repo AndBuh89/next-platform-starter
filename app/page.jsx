@@ -200,7 +200,7 @@ export default function Page() {
   }}
 >
   View the daily vitality routine
-                </a>
+</a>
 
                 <div style={styles.small2}>Tip: open it in a new tab so you can come back to your score.</div>
               </div>
