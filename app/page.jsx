@@ -49,26 +49,13 @@ const QUESTIONS = [
 ];
 
 export default function Page() {
- useEffect(() => {
-  const interval = setInterval(() => {
-    if (window.ttq && window.ttq.track) {
-      window.ttq.track("ViewContent", {
-        content_id: "mensflowcheck-quiz",
-        content_type: "product"
-      });
-      clearInterval(interval);
-    }
-  }, 300);
-}, []);
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState({});
-   export default function Page() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
 
+  // Fire ViewContent once, after ttq is ready
   useEffect(() => {
     const interval = setInterval(() => {
-      if (window.ttq && window.ttq.page) {
+      if (typeof window !== "undefined" && window.ttq && window.ttq.track) {
         window.ttq.track("ViewContent", {
           content_id: "mensflowcheck-quiz",
           content_type: "product",
@@ -76,7 +63,11 @@ export default function Page() {
         clearInterval(interval);
       }
     }, 300);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const done = step >= QUESTIONS.length;
 
   const done = step >= QUESTIONS.length;
 
