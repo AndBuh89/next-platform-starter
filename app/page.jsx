@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-const CTA_LINK = "https://www.checkout-ds24.com/product/592276?ds24tr=6DVJVMuVd2cVuQVEw5rPFd&pfnid=1&aff=AndyBuh";
+const CTA_LINK = "https://getgoliathxl10.com/read#aff=AndyBuh";
 const QUESTIONS = [
   {
     id: "age",
