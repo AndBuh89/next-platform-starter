@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const CTA_LINK = "https://getgoliathxl10.com/read#aff=AndyBuh";
 const QUESTIONS = [
@@ -51,6 +51,11 @@ const QUESTIONS = [
 export default function Page() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
+    useEffect(() => {
+    if (window.ttq) {
+      window.ttq.track("ViewContent");
+    }
+  }, []);
 
   const done = step >= QUESTIONS.length;
 
