@@ -50,12 +50,15 @@ const QUESTIONS = [
 
 export default function Page() {
  useEffect(() => {
-  if (window.ttq) {
-    window.ttq.track("ViewContent", {
-      content_id: "mensflowcheck-quiz",
-      content_type: "product",
-    });
-  }
+  const interval = setInterval(() => {
+    if (window.ttq && window.ttq.track) {
+      window.ttq.track("ViewContent", {
+        content_id: "mensflowcheck-quiz",
+        content_type: "product"
+      });
+      clearInterval(interval);
+    }
+  }, 300);
 }, []);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
