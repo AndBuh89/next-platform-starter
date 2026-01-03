@@ -49,6 +49,11 @@ const QUESTIONS = [
 ];
 
 export default function Page() {
+  useEffect(() => {
+  if (window.ttq) {
+    window.ttq.track("ViewContent", { content_id: "mensflowcheck_quiz" });
+  }
+}, []);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
     useEffect(() => {
