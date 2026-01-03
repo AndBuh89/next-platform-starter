@@ -49,9 +49,12 @@ const QUESTIONS = [
 ];
 
 export default function Page() {
-  useEffect(() => {
+ useEffect(() => {
   if (window.ttq) {
-    window.ttq.track("ViewContent", { content_id: "mensflowcheck_quiz" });
+    window.ttq.track("ViewContent", {
+      content_id: "mensflowcheck-quiz",
+      content_type: "product",
+    });
   }
 }, []);
   const [step, setStep] = useState(0);
@@ -206,7 +209,12 @@ export default function Page() {
   rel="nofollow noopener"
   style={styles.cta}
   onClick={() => {
-    if (window.ttq) window.ttq.track("CompleteRegistration");
+    if (window.ttq) {
+      window.ttq.track("CompleteRegistration", {
+        content_id: "mensflowcheck-offer",
+        content_type: "product",
+      });
+    }
   }}
 >
   View the daily vitality routine
