@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const DIGISTORE_AFFILIATE_LINK =
   "https://getgoliathxl10.com/read#aff=AndyBuh"; // TODO: pune linkul tău real
@@ -54,6 +54,11 @@ export default function Page() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({}); // { [id]: idx }
   const [toast, setToast] = useState(null);
+  useEffect(() => {
+  if (typeof window !== "undefined" && window.ttq) {
+    window.ttq.track("ViewContent");
+  }
+}, []);
 
   const done = step >= QUESTIONS.length;
 
