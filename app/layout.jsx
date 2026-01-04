@@ -13,25 +13,26 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
+      <head />
 
-     {/* TIKTOK PIXEL */}
-<Script id="tiktok-pixel" strategy="afterInteractive">
+      <body className="antialiased text-white bg-blue-900">
+
+        {/* TIKTOK PIXEL */}
+        <Script id="tiktok-pixel" strategy="afterInteractive">
 {`
 !function (w, d, t) {
-  w.TiktokAnalyticsObject=t;
-  var ttq=w[t]=w[t]||[];
-  ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"];
-  ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
-  for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+  w.TiktokAnalyticsObject = t;
+  var ttq = w[t] = w[t] || [];
+  ttq.methods = ["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"];
+  ttq.setAndDefer = function(t, e) { t[e] = function() { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } };
+  for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
   ttq.load('D5CN6NRC77U3FL790S20');
+  ttq.page();
 }(window, document, 'ttq');
 `}
-</Script>
-{/* END PIXEL */}
+        </Script>
+        {/* END PIXEL */}
 
-      </head>
-      <body className="antialiased text-white bg-blue-900">
         <div className="flex flex-col min-h-screen px-6 bg-noise sm:px-12">
           <div className="flex flex-col w-full max-w-5xl mx-auto grow">
             <Header />
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
             <Footer />
           </div>
         </div>
+
       </body>
     </html>
   )
