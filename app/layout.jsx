@@ -24,7 +24,6 @@ export default function RootLayout({ children }) {
   ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}; 
   for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
   ttq.load('D5CN6NRC77U3FL790S20');
-  ttq.page();
 }(window, document, 'ttq');
 `}
         </Script>
