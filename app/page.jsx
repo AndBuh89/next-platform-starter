@@ -55,18 +55,24 @@ export default function Page() {
   // Fire ViewContent once, after ttq is ready
   useEffect(() => {
   let tries = 0;
+
   const timer = setInterval(() => {
     tries++;
-    if (window.ttq && window.ttq.track) {
-      window.ttq.page();
+
+    if (typeof window !== "undefined" && window.ttq?.track) {
+      // NU mai trimite ttq.page() fără content_id
       window.ttq.track("ViewContent", {
         content_id: "mensflowcheck-quiz",
         content_type: "product",
       });
+
       clearInterval(timer);
     }
+
     if (tries > 20) clearInterval(timer);
   }, 300);
+
+  return () => clearInterval(timer);
 }, []);
 
   const done = step >= QUESTIONS.length;
