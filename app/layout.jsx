@@ -15,19 +15,20 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
 
-        {/* TIKTOK PIXEL */}
-        <Script id="tiktok-pixel" strategy="afterInteractive">
+     {/* TIKTOK PIXEL */}
+<Script id="tiktok-pixel" strategy="afterInteractive">
 {`
 !function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+  w.TiktokAnalyticsObject=t;
+  var ttq=w[t]=w[t]||[];
   ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"];
-  ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}; 
+  ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
   for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
   ttq.load('D5CN6NRC77U3FL790S20');
 }(window, document, 'ttq');
 `}
-        </Script>
-        {/* END PIXEL */}
+</Script>
+{/* END PIXEL */}
 
       </head>
       <body className="antialiased text-white bg-blue-900">
