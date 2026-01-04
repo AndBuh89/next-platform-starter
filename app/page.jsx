@@ -53,25 +53,35 @@ export default function Page() {
   const [answers, setAnswers] = useState({});
 
   // Fire ViewContent once, after ttq is ready
- useEffect(() => {
-  const timer = setInterval(() => {
-    if (window.ttq && window.ttq.track) {
-      window.ttq.page();
+ import { useEffect, useRef, useMemo, useState } from "react";
 
-      window.ttq.track("ViewContent", {
-        contents: [{
+export default function Page() {
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    if (firedRef.current) return;          // guard anti-dublu
+    firedRef.current = true;
+
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries++;
+
+      if (window.ttq?.track) {
+        window.ttq.track("ViewContent", {
           content_id: "mensflowcheck-quiz",
           content_type: "product",
-          content_name: "Mens Vitality Quiz"
-        }],
-        value: 0,
-        currency: "USD"
-      });
+        });
+        clearInterval(timer);
+      }
 
-      clearInterval(timer);
-    }
-  }, 300);
-}, []);
+      if (tries > 20) clearInterval(timer);
+    }, 300);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // restul codului...
+}
 
   const done = step >= QUESTIONS.length;
 
