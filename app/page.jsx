@@ -80,9 +80,6 @@ export default function Page() {
     return () => clearInterval(timer);
   }, []);
 
-  // restul codului...
-}
-
   const done = step >= QUESTIONS.length;
 
   const total = useMemo(() => {
