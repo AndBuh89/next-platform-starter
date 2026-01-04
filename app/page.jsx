@@ -54,26 +54,19 @@ export default function Page() {
 
   // Fire ViewContent once, after ttq is ready
   useEffect(() => {
-  const interval = setInterval(() => {
-    if (typeof window !== "undefined" && window.ttq && window.ttq.track) {
-
-      // PageView curat, cu content_id
-      window.ttq.page({
-        content_id: "mensflowcheck-quiz",
-        content_type: "product",
-      });
-
-      // ViewContent real (semnalul principal)
+  let tries = 0;
+  const timer = setInterval(() => {
+    tries++;
+    if (window.ttq && window.ttq.track) {
+      window.ttq.page();
       window.ttq.track("ViewContent", {
         content_id: "mensflowcheck-quiz",
         content_type: "product",
       });
-
-      clearInterval(interval);
+      clearInterval(timer);
     }
+    if (tries > 20) clearInterval(timer);
   }, 300);
-
-  return () => clearInterval(interval);
 }, []);
 
   const done = step >= QUESTIONS.length;
