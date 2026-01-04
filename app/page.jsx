@@ -56,10 +56,10 @@ export default function Page() {
  import { useEffect, useRef, useMemo, useState } from "react";
 
 export default function Page() {
-  const firedRef = useRef(false);
+    const firedRef = useRef(false);
 
   useEffect(() => {
-    if (firedRef.current) return;          // guard anti-dublu
+    if (firedRef.current) return;
     firedRef.current = true;
 
     let tries = 0;
@@ -79,7 +79,6 @@ export default function Page() {
 
     return () => clearInterval(timer);
   }, []);
-
   const done = step >= QUESTIONS.length;
 
   const total = useMemo(() => {
