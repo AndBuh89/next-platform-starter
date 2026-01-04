@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const CTA_LINK = "https://getgoliathxl10.com/read#aff=AndyBuh";
+
 const QUESTIONS = [
   {
     id: "age",
@@ -52,21 +53,18 @@ export default function Page() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
 
-  // Fire ViewContent once, after ttq is ready
- import { useEffect, useRef, useMemo, useState } from "react";
-
-export default function Page() {
-    const firedRef = useRef(false);
+  // Fire ViewContent ONCE (guarded) after ttq is ready
+  const firedViewContent = useRef(false);
 
   useEffect(() => {
-    if (firedRef.current) return;
-    firedRef.current = true;
+    if (firedViewContent.current) return;
+    firedViewContent.current = true;
 
     let tries = 0;
     const timer = setInterval(() => {
-      tries++;
+      tries += 1;
 
-      if (window.ttq?.track) {
+      if (typeof window !== "undefined" && window.ttq?.track) {
         window.ttq.track("ViewContent", {
           content_id: "mensflowcheck-quiz",
           content_type: "product",
@@ -74,11 +72,12 @@ export default function Page() {
         clearInterval(timer);
       }
 
-      if (tries > 20) clearInterval(timer);
+      if (tries > 20) clearInterval(timer); // ~6 sec max
     }, 300);
 
     return () => clearInterval(timer);
   }, []);
+
   const done = step >= QUESTIONS.length;
 
   const total = useMemo(() => {
@@ -90,7 +89,6 @@ export default function Page() {
   }, [answers]);
 
   const band = useMemo(() => {
-    // max score = 14
     if (total <= 5) return "Low Vitality";
     if (total <= 10) return "Moderate Vitality";
     return "Strong Vitality";
@@ -123,6 +121,23 @@ export default function Page() {
     if (step > 0) setStep(step - 1);
   };
 
+  const handleCtaClick = () => {
+    if (typeof window === "undefined") return;
+    if (!window.ttq?.track) return;
+
+    window.ttq.track("CompleteRegistration", {
+      contents: [
+        {
+          content_id: "mensflowcheck-offer",
+          content_type: "product",
+          content_name: "Vitality Routine Access",
+        },
+      ],
+      value: 0,
+      currency: "USD",
+    });
+  };
+
   return (
     <div style={styles.bg}>
       <div style={styles.wrap}>
@@ -148,8 +163,7 @@ export default function Page() {
             </h1>
 
             <p style={styles.sub}>
-              A short lifestyle self-check focused on daily energy, focus and confidence habits. This is <b>not</b> medical
-              advice.
+              A short lifestyle self-check focused on daily energy, focus and confidence habits. This is <b>not</b> medical advice.
             </p>
 
             <div style={styles.kpis}>
@@ -207,8 +221,7 @@ export default function Page() {
                   <span
                     style={{
                       ...styles.badge,
-                      background:
-                        band === "Low Vitality" ? "#fb7185" : band === "Strong Vitality" ? "#34d399" : "#fbbf24",
+                      background: band === "Low Vitality" ? "#fb7185" : band === "Strong Vitality" ? "#34d399" : "#fbbf24",
                     }}
                   />
                   Vitality Score: {band}
@@ -217,27 +230,15 @@ export default function Page() {
                 <h2 style={styles.h2}>{headline}</h2>
                 <p style={styles.resultP}>{summary}</p>
 
-         <a
-  href={CTA_LINK}
-  target="_blank"
-  rel="nofollow noopener"
-  style={styles.cta}
-  onClick={() => {
-  if (window.ttq?.track) {
-    window.ttq.track("CompleteRegistration", {
-      contents: [{
-        content_id: "mensflowcheck-offer",
-        content_type: "product",
-        content_name: "Vitality Routine Access"
-      }],
-      value: 0,
-      currency: "USD"
-    });
-  }
-}}
->
-  View the daily vitality routine
-</a>
+                <a
+                  href={CTA_LINK}
+                  target="_blank"
+                  rel="nofollow noopener"
+                  style={styles.cta}
+                  onClick={handleCtaClick}
+                >
+                  View the daily vitality routine
+                </a>
 
                 <div style={styles.small2}>Tip: open it in a new tab so you can come back to your score.</div>
               </div>
